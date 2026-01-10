@@ -27,6 +27,9 @@ public class CourierShift {
     List<Visit> visits = new ArrayList<>();
 
     public CourierShift() {}
+    public boolean isUsed() {
+        return !visits.isEmpty();
+    }
 
     public CourierShift(String id, int hotCapacity, int coldCapacity,
                         int startMinute, int durationMinutes) {
