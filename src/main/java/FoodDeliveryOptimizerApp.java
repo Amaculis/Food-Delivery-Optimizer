@@ -90,16 +90,33 @@ public class FoodDeliveryOptimizerApp {
         o2.setCustomerVisit(o2Delivery);
 
         // Order 3
-        Order o3 = new Order("O3", 780, 900, List.of(pizza, salad));
+        Order o3 = new Order("O3", 1080, 1100, List.of(pizza, salad));
         Visit o3Pickup = new Visit(o3, restaurant1, Visit.VisitType.RESTAURANT);
         Visit o3Delivery = new Visit(o3, customerC, Visit.VisitType.CUSTOMER);
         o3.setRestaurantVisit(o3Pickup);
         o3.setCustomerVisit(o3Delivery);
 
+        // Order 4 
+        Order o4 = new Order("O4", 1130, 1280, List.of(pizza));
+        Visit o4Pickup = new Visit(o4, restaurant2, Visit.VisitType.RESTAURANT);
+        Visit o4Delivery = new Visit(o4, customerA, Visit.VisitType.CUSTOMER);
+        o4.setRestaurantVisit(o4Pickup);
+        o4.setCustomerVisit(o4Delivery);
+
+        // Order 5 
+        Order o5 = new Order("O5", 800, 850, List.of(salad));
+        Visit o5Pickup = new Visit(o5, restaurant1, Visit.VisitType.RESTAURANT);
+        Visit o5Delivery = new Visit(o5, customerB, Visit.VisitType.CUSTOMER);
+        o5.setRestaurantVisit(o5Pickup);
+        o5.setCustomerVisit(o5Delivery);
+
+
         List<Visit> visits = List.of(
                 o1Pickup, o1Delivery,
                 o2Pickup, o2Delivery,
-                o3Pickup, o3Delivery
+                o3Pickup, o3Delivery,
+                o4Pickup, o4Delivery,
+                o5Pickup, o5Delivery
         );
 
         List<Order> orders = List.of(o1, o2, o3);

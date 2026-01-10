@@ -11,12 +11,14 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
         return new Constraint[] {
                 orderMustBeDelivered(factory),
                 deliveryMustBeAssigned(factory),
-                courierShiftMustCoverOrderTime(factory),
+                //courierShiftMustCoverOrderTime(factory),
                 hotCapacityExceeded(factory),
                 coldCapacityExceeded(factory),
                 customerDeliveryNotInTimeWindow(factory),
                 pickupBeforeDelivery(factory),
-                sameOrderSameCourier(factory)
+                sameOrderSameCourier(factory),
+                minimizeCouriers(factory),
+                courierShiftDurationBetween3And6Hours(factory)
         };
     }
 
@@ -24,6 +26,7 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
      * HARD:
      * Customer delivery must be inside order delivery window.
      */
+    //??? What is the difference with deliveryMustBeAssigned
     private Constraint orderMustBeDelivered(ConstraintFactory factory) {
         return factory.forEach(Visit.class)
                 .filter(v -> v.getType() == Visit.VisitType.CUSTOMER)
@@ -50,6 +53,7 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
                 .asConstraint("Order must be picked up and delivered by the same courier");
     }
 
+    //??? What is the difference with orderMustBeDelivered
     private Constraint deliveryMustBeAssigned(ConstraintFactory factory) {
         return factory.forEach(Visit.class)
                 .filter(v -> v.getType() == Visit.VisitType.CUSTOMER)
@@ -62,9 +66,9 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
          * HARD:
          * Courier shift must cover the order time window.
          * We evaluate this on CUSTOMER visits (one per order).
-         */
-    private Constraint courierShiftMustCoverOrderTime(ConstraintFactory factory) {
-        return factory.forEach(Visit.class)
+         * !!!!!!!!!! Temporarary commented out, because could not use second courier  - ArtjomsM
+    //private Constraint courierShiftMustCoverOrderTime(ConstraintFactory factory) {
+    /*    return factory.forEach(Visit.class)
                 .filter(v -> v.getType() == Visit.VisitType.CUSTOMER)
                 .filter(v -> v.getCourier() != null)
                 .filter(v -> {
@@ -75,6 +79,22 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
                 })
                 .penalize(HardSoftScore.ONE_HARD)
                 .asConstraint("Courier shift outside order time window");
+    }
+*/
+
+    private Constraint visitMustBeWithinCourierShift(ConstraintFactory factory) {
+        return factory.forEach(Visit.class)
+                .filter(v -> v.getCourier() != null)
+                .filter(v -> v.getMinuteTime() != null)
+                .filter(v -> {
+                    CourierShift shift = v.getCourier();
+                    int t = v.getMinuteTime();
+                    int start = shift.getStartMinute();
+                    int end = shift.getEndMinute();
+                    return t < start || t > end;
+                })
+                .penalize(HardSoftScore.ONE_HARD)
+                .asConstraint("Visit must be within courier shift");
     }
 
     /**
@@ -159,4 +179,39 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
                 .penalize(HardSoftScore.ofHard(1_000))
                 .asConstraint("Pickup must occur before delivery");
     }
+    /**
+     * SOFT:
+     * Do not use new couriers if possible.
+     * Make extra penalty if courier have been added.
+     */
+    private static final int EXTRA_COURIER_PENALTY = 100;
+
+    private Constraint minimizeCouriers(ConstraintFactory factory) {
+        return factory.forEach(CourierShift.class)
+                .filter(CourierShift::isUsed)
+                .groupBy(ConstraintCollectors.count())
+                .filter(c -> c > 1)
+                .penalize(
+                        HardSoftScore.ofSoft(EXTRA_COURIER_PENALTY),
+                        c -> c - 1
+                )
+                .asConstraint("Extra couriers are expensive");
+    }
+
+    /**
+     * Hard:
+     * Courier shift limits.
+     * Courier is not allowed to work between 3 and 6 hours.
+     */
+    private Constraint courierShiftDurationBetween3And6Hours(ConstraintFactory factory) {
+        return factory.forEach(CourierShift.class)
+                .filter(CourierShift::isUsed)
+                .filter(shift ->
+                        shift.getDurationMinutes() < 180
+                                || shift.getDurationMinutes() > 360
+                )
+                .penalize(HardSoftScore.ONE_HARD)
+                .asConstraint("Courier shift must be between 3 and 6 hours");
+    }
+
 }
