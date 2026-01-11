@@ -59,7 +59,7 @@ public class Visit {
         int arrivalTime;
         if (previousVisit == null) {
             // The courier starts their shift
-            arrivalTime = courier.getStartMinute();
+            arrivalTime = order.getEarliestMinute();
         } else {
             Integer prevTime = previousVisit.getMinuteTime();
             if (prevTime == null) {

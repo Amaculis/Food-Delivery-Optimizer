@@ -18,7 +18,8 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
                 pickupBeforeDelivery(factory),
                 sameOrderSameCourier(factory),
                 minimizeCouriers(factory),
-                courierShiftDurationBetween3And6Hours(factory)
+                courierShiftDurationBetween3And6Hours(factory),
+                courierIdleGapTooLarge(factory)
         };
     }
 
@@ -184,7 +185,7 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
      * Do not use new couriers if possible.
      * Make extra penalty if courier have been added.
      */
-    private static final int EXTRA_COURIER_PENALTY = 100;
+    private static final int EXTRA_COURIER_PENALTY = 10;
 
     private Constraint minimizeCouriers(ConstraintFactory factory) {
         return factory.forEach(CourierShift.class)
@@ -206,12 +207,28 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
     private Constraint courierShiftDurationBetween3And6Hours(ConstraintFactory factory) {
         return factory.forEach(CourierShift.class)
                 .filter(CourierShift::isUsed)
-                .filter(shift ->
-                        shift.getDurationMinutes() < 180
-                                || shift.getDurationMinutes() > 360
-                )
+                .filter(shift -> {
+                    int d = shift.getDurationMinutes();
+                    return d < 180 || d > 360;
+                })
                 .penalize(HardSoftScore.ONE_HARD)
                 .asConstraint("Courier shift must be between 3 and 6 hours");
     }
 
+    private Constraint courierIdleGapTooLarge(ConstraintFactory factory) {
+        return factory.forEach(Visit.class)
+                .filter(v -> v.getCourier() != null)
+                .filter(v -> v.getPreviousVisit() != null)
+                .filter(v -> v.getMinuteTime() != null)
+                .filter(v -> v.getPreviousVisit().getMinuteTime() != null)
+                .filter(v -> {
+                    int gap = v.getMinuteTime()
+                            - v.getPreviousVisit().getMinuteTime();
+                    return gap > 45;
+                })
+                //.penalize(HardSoftScore.ONE_HARD)
+                .penalize(HardSoftScore.ofHard(10))
+
+                .asConstraint("Courier shift too large");
+    }
 }

@@ -72,8 +72,8 @@ public class FoodDeliveryOptimizerApp {
         Restaurant r2 = new Restaurant("R2", "ChainB", 3, false);
         r2.setLocation(restaurant2);
 
-        CourierShift c1 = new CourierShift("C1", 10, 5, 480, 240); // 08:00–12:00
-        CourierShift c2 = new CourierShift("C2", 6, 10, 540, 600);
+        CourierShift c1 = new CourierShift("C1", 10, 5);//, 480, 240); // 08:00–12:00
+        CourierShift c2 = new CourierShift("C2", 6, 10);//, 540, 600);
 
         // Order 1
         Order o1 = new Order("O1", 500, 560, List.of(pizza));
