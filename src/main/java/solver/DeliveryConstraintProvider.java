@@ -18,7 +18,8 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
                 pickupBeforeDelivery(factory),
                 sameOrderSameCourier(factory),
                 minimizeCouriers(factory),
-                courierShiftDurationBetween3And6Hours(factory)
+                courierShiftDurationBetween3And6Hours(factory),
+                foodMaxDeliveryTimeNotExceeded(factory),
         };
     }
 
@@ -214,4 +215,42 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
                 .asConstraint("Courier shift must be between 3 and 6 hours");
     }
 
+    /**
+     * HARD:
+     * Food maximum delivery time must not be exceeded.
+     * Measured from pickup minuteTime to delivery minuteTime.
+     */
+    private Constraint foodMaxDeliveryTimeNotExceeded(ConstraintFactory factory) {
+        return factory.forEach(Visit.class)
+                .filter(v -> v.getType() == Visit.VisitType.CUSTOMER)
+                .join(Visit.class,
+                        Joiners.equal(Visit::getOrder),
+                        Joiners.filtering((cust, rest) ->
+                                rest.getType() == Visit.VisitType.RESTAURANT))
+                .filter((cust, rest) ->
+                        cust.getMinuteTime() != null && rest.getMinuteTime() != null)
+                .penalize(HardSoftScore.ONE_HARD, (cust, rest) -> {
+                    int pickupTime = rest.getMinuteTime();
+                    int customerDeliveryTime = cust.getMinuteTime();
+
+                    // !!!TODO handle delivery before pickup via another constraint
+                    if (customerDeliveryTime <= pickupTime) {
+                        return 0;
+                    }
+
+                    int allowedDeliveryTime = cust.getOrder().getFoods().stream()
+                            .mapToInt(Food::getMaxDeliveryMinutes)
+                            .min()
+                            .orElse(Integer.MAX_VALUE);
+
+                    if (allowedDeliveryTime == Integer.MAX_VALUE) {
+                        return 0;
+                    }
+
+                    int actualDeliveryTime = customerDeliveryTime - pickupTime;
+
+                    return Math.max(0, actualDeliveryTime - allowedDeliveryTime);
+                })
+                .asConstraint("Food max delivery time exceeded");
+    }
 }

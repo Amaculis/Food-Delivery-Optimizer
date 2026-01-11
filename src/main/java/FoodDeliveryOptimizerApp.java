@@ -17,6 +17,9 @@ public class FoodDeliveryOptimizerApp {
         // --- Courier shifts ---
         DeliverySolution problem = getSolution();
 
+        Router router = Router.getDefaultRouterInstance();
+        router.setDistanceTimeMap(problem.getLocationList());
+
         SolverFactory<DeliverySolution> solverFactory =
                 SolverFactory.createFromXmlResource("solverConfig.xml");
 
