@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @PlanningEntity
 @Getter
@@ -20,9 +21,10 @@ public class CourierShift {
     private int hotCapacity;
     private int coldCapacity;
 
-    private int startMinute;   // minutes since day start
-    private int durationMinutes;
+    //private Integer  startMinute;   // minutes since day start
+    //private int durationMinutes;
 
+    private static final int MAX_DURATION = 360;
     @PlanningListVariable(valueRangeProviderRefs = "visitList")
     List<Visit> visits = new ArrayList<>();
 
@@ -36,9 +38,43 @@ public class CourierShift {
         this.id = id;
         this.hotCapacity = hotCapacity;
         this.coldCapacity = coldCapacity;
-        this.startMinute = startMinute;
-        this.durationMinutes = durationMinutes;
+        //this.startMinute = startMinute;
+        //this.durationMinutes = durationMinutes;
     }
 
-    public int getEndMinute() { return startMinute + durationMinutes; }
+    public Integer getStartMinute() {
+        if (visits == null || visits.isEmpty()) {
+            return null;
+        }
+
+        return visits.stream()
+                .map(Visit::getTimeMinute)
+                .filter(Objects::nonNull)
+                .min(Integer::compareTo)
+                .orElse(null);
+    }
+
+    public Integer getEndMinute() {
+        if (visits == null || visits.isEmpty()) {
+            return null;
+        }
+
+        return visits.stream()
+                .map(Visit::getTimeMinute)
+                .filter(Objects::nonNull)
+                .max(Integer::compareTo)
+                .orElse(null);
+    }
+
+    public int getDurationMinutes() {
+        Integer start = getStartMinute();
+        Integer end = getEndMinute();
+
+        if (start == null || end == null) {
+            return 0;
+        }
+        return end - start;
+    }
+
+    //public int getEndMinute() { return startMinute + durationMinutes; }
 }

@@ -146,6 +146,7 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
      * HARD:
      * Customer delivery must be inside order delivery window.
      */
+    //updateDeliveryMinuteTime() does this.minuteTime = Math.max(arrivalTime, readyTime) and then minuteTime < earliest, so there is 2 almost same rules.
     private Constraint customerDeliveryNotInTimeWindow(ConstraintFactory factory) {
         return factory.forEach(Visit.class)
                 .filter(v -> v.getType() == Visit.VisitType.CUSTOMER)
@@ -158,6 +159,44 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
                 .penalize(HardSoftScore.ONE_HARD)
                 .asConstraint("Customer delivery time window violated");
     }
+
+    /**
+     * HARD:
+     * Delivery cannot be earlier.
+     */
+    /*private Constraint arriveTooEarly(ConstraintFactory factory) {
+        return factory.forEach(Visit.class)
+                .filter(v -> v.getMinuteTime() != null)
+                .filter(v -> v.getMinuteTime() < v.getOrder().getEarliestMinute())
+                .penalize(HardSoftScore.ONE_HARD)
+                .asConstraint("Arrive too early");
+    }*/
+
+    /**
+     * HARD:
+     * Delivery cannot be after.
+     */
+
+//    private Constraint arrivalBeforePrevious(ConstraintFactory factory) {
+//        return factory.forEach(Visit.class)
+//                .filter(v -> v.getPreviousVisit() != null)
+//                .filter(v -> v.getMinuteTime() != null)
+//                .filter(v -> v.getPreviousVisit().getMinuteTime() != null)
+//                .filter(v -> {
+//                    Visit prev = v.getPreviousVisit();
+//
+//                    int travel = prev.calculateTravelTime(prev.getLocation(), v.getLocation());
+//                    int service = prev.getServiceTime(prev);
+//
+//                    return v.getMinuteTime() <
+//                            prev.getMinuteTime() + travel + service;
+//                })
+//                .penalize(HardSoftScore.ONE_HARD)
+//                .asConstraint("Arrived before physically possible");
+//    }
+
+
+
 
     /**
      * HARD:

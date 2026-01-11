@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @PlanningSolution
 @Getter
@@ -44,5 +46,12 @@ public class DeliverySolution {
     public DeliverySolution(List<CourierShift> courierShifts, List<Order> orders) {
         this.courierShifts = courierShifts;
         this.orders = orders;
+    }
+
+    @ValueRangeProvider(id = "shiftStartRange")
+    public List<Integer> getShiftStartRange() {
+        return IntStream.range(0, 24 * 60)
+                .boxed()
+                .collect(Collectors.toList());
     }
 }

@@ -32,7 +32,7 @@ public class Visit {
     private Visit previousVisit;
     @NextElementShadowVariable(sourceVariableName = "visits")
     private Visit nextVisit;
-
+    //@PlanningVariable(valueRangeProviderRefs = "timeRange")
     @CascadingUpdateShadowVariable(targetMethodName = "updateDeliveryMinuteTime")
     private Integer minuteTime;
 
@@ -48,6 +48,10 @@ public class Visit {
         this.order = order;
         this.location = location;
         this.type = type;
+    }
+
+    public Integer getTimeMinute() {
+        return minuteTime;
     }
 
     public void updateDeliveryMinuteTime() {
