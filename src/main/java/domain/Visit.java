@@ -78,9 +78,14 @@ public class Visit {
     }
 
     private int calculateTravelTime(Location from, Location to) {
-        // Simple placeholder - you can implement actual distance calculation
-        // using the Haversine formula with lat/lon
-        return 10; // minutes
+        if (from == null || to == null) return 0;
+
+        Long seconds = from.timeTo(to);
+        if (seconds == null) {
+            return 0;
+        }
+
+        return (int) Math.ceil(seconds / 60.0);
     }
 
     private int getServiceTime(Visit visit) {
