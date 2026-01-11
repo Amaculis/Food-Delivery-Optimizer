@@ -54,8 +54,6 @@ public class FoodDeliveryOptimizerApp {
                         visit.getLocation().getId()
                 );
             });
-
-
         });
     }
 
@@ -77,7 +75,7 @@ public class FoodDeliveryOptimizerApp {
 
         CourierShift c1 = new CourierShift("C1", 10, 5);//, 480, 240); // 08:00–12:00
         CourierShift c2 = new CourierShift("C2", 6, 10);//, 540, 600);
-
+        CourierShift c3 = new CourierShift("C3", 6, 10);
         // Order 1
         Order o1 = new Order("O1", 500, 560, List.of(pizza));
         Visit o1Pickup = new Visit(o1, restaurant1, Visit.VisitType.RESTAURANT);
@@ -123,7 +121,7 @@ public class FoodDeliveryOptimizerApp {
         );
 
         List<Order> orders = List.of(o1, o2, o3);
-        List<CourierShift> courierShifts = List.of(c1, c2);
+        List<CourierShift> courierShifts = List.of(c1, c2, c3);
         List<Restaurant> restaurants = List.of(r1, r2);
         List<Food> foods = List.of(pizza, salad);
         List<Location> locations = List.of(restaurant1, restaurant2, customerA, customerB, customerC);

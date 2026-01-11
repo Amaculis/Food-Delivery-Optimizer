@@ -10,16 +10,14 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
     public Constraint[] defineConstraints(ConstraintFactory factory) {
         return new Constraint[] {
                 orderMustBeDelivered(factory),
-                deliveryMustBeAssigned(factory),
-                //courierShiftMustCoverOrderTime(factory),
+                orderMustBeDeliveredInTimeWindow(factory),
+                visitMustBeWithinCourierShift(factory),
                 hotCapacityExceeded(factory),
                 coldCapacityExceeded(factory),
-                customerDeliveryNotInTimeWindow(factory),
                 pickupBeforeDelivery(factory),
                 sameOrderSameCourier(factory),
                 minimizeCouriers(factory),
                 courierShiftDurationBetween3And6Hours(factory),
-                courierIdleGapTooLarge(factory),
                 foodMaxDeliveryTimeNotExceeded(factory),
         };
     }
@@ -28,7 +26,18 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
      * HARD:
      * Customer delivery must be inside order delivery window.
      */
-    //??? What is the difference with deliveryMustBeAssigned
+    private Constraint orderMustBeDeliveredInTimeWindow(ConstraintFactory factory) {
+        return factory.forEach(Visit.class)
+                .filter(v -> v.getType() == Visit.VisitType.CUSTOMER)
+                .filter(v -> v.getMinuteTime() < v.getOrder().getEarliestMinute() || v.getMinuteTime() > v.getOrder().getLatestMinute())
+                .penalize(HardSoftScore.ONE_HARD)
+                .asConstraint("Order must be delivered in time");
+    }
+
+    /**
+     * HARD:
+     * Customer delivery must be inside order delivery window.
+     */
     private Constraint orderMustBeDelivered(ConstraintFactory factory) {
         return factory.forEach(Visit.class)
                 .filter(v -> v.getType() == Visit.VisitType.CUSTOMER)
@@ -55,35 +64,6 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
                 .asConstraint("Order must be picked up and delivered by the same courier");
     }
 
-    //??? What is the difference with orderMustBeDelivered
-    private Constraint deliveryMustBeAssigned(ConstraintFactory factory) {
-        return factory.forEach(Visit.class)
-                .filter(v -> v.getType() == Visit.VisitType.CUSTOMER)
-                .filter(v -> v.getCourier() == null)
-                .penalize(HardSoftScore.ofHard(1_000))
-                .asConstraint("Delivery must be assigned");
-    }
-
-        /**
-         * HARD:
-         * Courier shift must cover the order time window.
-         * We evaluate this on CUSTOMER visits (one per order).
-         * !!!!!!!!!! Temporarary commented out, because could not use second courier  - ArtjomsM
-    //private Constraint courierShiftMustCoverOrderTime(ConstraintFactory factory) {
-    /*    return factory.forEach(Visit.class)
-                .filter(v -> v.getType() == Visit.VisitType.CUSTOMER)
-                .filter(v -> v.getCourier() != null)
-                .filter(v -> {
-                    CourierShift shift = v.getCourier();
-                    Order order = v.getOrder();
-                    return shift.getStartMinute() > order.getEarliestMinute()
-                            || shift.getEndMinute() < order.getLatestMinute();
-                })
-                .penalize(HardSoftScore.ONE_HARD)
-                .asConstraint("Courier shift outside order time window");
-    }
-*/
-
     private Constraint visitMustBeWithinCourierShift(ConstraintFactory factory) {
         return factory.forEach(Visit.class)
                 .filter(v -> v.getCourier() != null)
@@ -93,7 +73,7 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
                     int t = v.getMinuteTime();
                     int start = shift.getStartMinute();
                     int end = shift.getEndMinute();
-                    return t < start || t > end;
+                    return t > end;
                 })
                 .penalize(HardSoftScore.ONE_HARD)
                 .asConstraint("Visit must be within courier shift");
@@ -146,23 +126,6 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
 
     /**
      * HARD:
-     * Customer delivery must be inside order delivery window.
-     */
-    private Constraint customerDeliveryNotInTimeWindow(ConstraintFactory factory) {
-        return factory.forEach(Visit.class)
-                .filter(v -> v.getType() == Visit.VisitType.CUSTOMER)
-                .filter(v -> v.getMinuteTime() != null)
-                .filter(v -> {
-                    int t = v.getMinuteTime();
-                    Order o = v.getOrder();
-                    return t < o.getEarliestMinute() || t > o.getLatestMinute();
-                })
-                .penalize(HardSoftScore.ONE_HARD)
-                .asConstraint("Customer delivery time window violated");
-    }
-
-    /**
-     * HARD:
      * Pickup must occur before delivery.
      * Ensures the customer visit comes after the restaurant visit in the route.
      */
@@ -186,16 +149,16 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
      * Do not use new couriers if possible.
      * Make extra penalty if courier have been added.
      */
-    private static final int EXTRA_COURIER_PENALTY = 10;
-
+    private static final int EXTRA_COURIER_PENALTY = 20;
+    private static final int COURIER_TIME_PENALTY = 5;
     private Constraint minimizeCouriers(ConstraintFactory factory) {
         return factory.forEach(CourierShift.class)
                 .filter(CourierShift::isUsed)
-                .groupBy(ConstraintCollectors.count())
-                .filter(c -> c > 1)
-                .penalize(
-                        HardSoftScore.ofSoft(EXTRA_COURIER_PENALTY),
-                        c -> c - 1
+                .penalize(HardSoftScore.ONE_SOFT,
+                        c -> {
+                            var endTime = Math.max(c.getEndMinute(), 180)/60;
+                            return EXTRA_COURIER_PENALTY + endTime * COURIER_TIME_PENALTY;
+                        }
                 )
                 .asConstraint("Extra couriers are expensive");
     }
@@ -210,28 +173,12 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
                 .filter(CourierShift::isUsed)
                 .filter(shift -> {
                     int d = shift.getDurationMinutes();
-                    return d < 180 || d > 360;
+                    return d > 360;
                 })
                 .penalize(HardSoftScore.ONE_HARD)
-                .asConstraint("Courier shift must be between 3 and 6 hours");
+                .asConstraint("Courier shift must not be more than 6 hours");
     }
 
-    private Constraint courierIdleGapTooLarge(ConstraintFactory factory) {
-        return factory.forEach(Visit.class)
-                .filter(v -> v.getCourier() != null)
-                .filter(v -> v.getPreviousVisit() != null)
-                .filter(v -> v.getMinuteTime() != null)
-                .filter(v -> v.getPreviousVisit().getMinuteTime() != null)
-                .filter(v -> {
-                    int gap = v.getMinuteTime()
-                            - v.getPreviousVisit().getMinuteTime();
-                    return gap > 45;
-                })
-                //.penalize(HardSoftScore.ONE_HARD)
-                .penalize(HardSoftScore.ofHard(10))
-
-                .asConstraint("Courier shift too large");
-    }
     /**
      * HARD:
      * Food maximum delivery time must not be exceeded.
@@ -250,7 +197,6 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
                     int pickupTime = rest.getMinuteTime();
                     int customerDeliveryTime = cust.getMinuteTime();
 
-                    // !!!TODO handle delivery before pickup via another constraint
                     if (customerDeliveryTime <= pickupTime) {
                         return 0;
                     }

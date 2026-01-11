@@ -20,9 +20,6 @@ public class CourierShift {
     private int hotCapacity;
     private int coldCapacity;
 
-    // private int startMinute;   // minutes since day start
-    //private int durationMinutes;
-
     @PlanningListVariable(valueRangeProviderRefs = "visitList")
     List<Visit> visits = new ArrayList<>();
 
