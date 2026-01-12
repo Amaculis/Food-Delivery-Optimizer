@@ -23,8 +23,9 @@ public class Order {
     @InverseRelationShadowVariable(sourceVariableName = "order")
     private Visit customerVisit;
 
-    private Restaurant restaurant;
+    private String chainId;
     private int minAllowedTimeToDeliver;
+    private int totalCookTime;
 
     public Order() {}
 
@@ -37,8 +38,9 @@ public class Order {
                 .mapToInt(Food::getMaxDeliveryMinutes)
                 .min()
                 .orElse(Integer.MAX_VALUE);
+        totalCookTime = foods.stream()
+                .mapToInt(Food::getPrepTimeMinutes)
+                .sum();
+        chainId = foods.get(0).getChainId();
     }
-
-
-
 }

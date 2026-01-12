@@ -20,8 +20,17 @@ public class Visit {
     @PlanningId
     private Long id;
 
+    @PlanningVariable(valueRangeProviderRefs = "restaurantList")
+    private Restaurant restaurant; //with allowUnassigned = true it doesn't work... It was better to split visit for Restaurant and Customer initially, now we need to assign dummy restaurant for all Customers
 
     private Location location;
+    public Location getLocation() {
+        if (type == VisitType.RESTAURANT && restaurant != null) {
+            return restaurant.getLocation();
+        }
+        return location;
+    }
+
     private Order order;
     private VisitType type; // RESTAURANT or CUSTOMER
 
@@ -33,7 +42,7 @@ public class Visit {
     @NextElementShadowVariable(sourceVariableName = "visits")
     private Visit nextVisit;
 
-    @CascadingUpdateShadowVariable(targetMethodName = "updateDeliveryMinuteTime")
+    @CascadingUpdateShadowVariable(targetMethodName = "updateData")
     private Integer minuteTime;
 
     public enum VisitType {
@@ -49,8 +58,19 @@ public class Visit {
         this.location = location;
         this.type = type;
     }
+    public Visit(Order order, Location location, Restaurant restaurant, VisitType type) {
+        this.id = ID_GENERATOR.incrementAndGet();
+        this.order = order;
+        this.location = location;
+        this.restaurant = restaurant;
+        this.type = type;
+    }
 
-    public void updateDeliveryMinuteTime() {
+    public void updateData() {
+        updateLocation();
+        updateDeliveryTime();
+    }
+    private void updateDeliveryTime() {
         if (courier == null) {
             minuteTime = null;
             return;
@@ -75,6 +95,13 @@ public class Visit {
         // This pushes the time forward and ensures constraints are calculated correctly.
         int readyTime = order.getEarliestMinute();
         this.minuteTime = Math.max(arrivalTime, readyTime);
+    }
+
+    private void updateLocation() {
+        if(type != VisitType.RESTAURANT || restaurant == null)
+            return;
+
+        location = restaurant.getLocation();
     }
 
     private int calculateTravelTime(Location from, Location to) {

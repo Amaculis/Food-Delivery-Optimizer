@@ -24,9 +24,9 @@ public class DeliverySolution {
     @PlanningScore
     private HardSoftScore score;
 
-    //must be multi-slot
+    @ValueRangeProvider(id = "restaurantList")
     @ProblemFactCollectionProperty
-    private List<Restaurant> restaurants;
+    private List<Restaurant> restaurantList;
 
     @ProblemFactCollectionProperty
     private List<Food> Foods;

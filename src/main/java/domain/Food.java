@@ -2,8 +2,10 @@ package domain;
 
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class Food {
 
     public enum Temperature {

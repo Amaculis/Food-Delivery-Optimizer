@@ -35,8 +35,6 @@ public class CourierShift {
         this.id = id;
         this.hotCapacity = hotCapacity;
         this.coldCapacity = coldCapacity;
-        //this.startMinute = startMinute;
-        //this.durationMinutes = durationMinutes;
     }
 
     //public int getEndMinute() { return startMinute + durationMinutes; }

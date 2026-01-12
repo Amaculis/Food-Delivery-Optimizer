@@ -21,7 +21,7 @@
 
     <!-- SOLVER -->
     <termination>
-        <secondsSpentLimit>5</secondsSpentLimit>
+        <secondsSpentLimit>3</secondsSpentLimit>
         <!-- <diminishedReturns /> -->
     </termination>
 

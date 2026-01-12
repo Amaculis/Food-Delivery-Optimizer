@@ -4,20 +4,35 @@ import domain.*;
 import ai.timefold.solver.core.api.score.stream.*;
 import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
 
+import java.util.Objects;
+
 public class DeliveryConstraintProvider implements ConstraintProvider {
 
     @Override
     public Constraint[] defineConstraints(ConstraintFactory factory) {
         return new Constraint[] {
+                //order hard
                 orderMustBeDelivered(factory),
                 orderMustBeDeliveredInTimeWindow(factory),
+                foodMaxDeliveryTimeNotExceeded(factory),
+
+                //courier hard
+                courierShiftDurationBetween3And6Hours(factory),
+
+                //courier-order hard
                 hotCapacityExceeded(factory),
                 coldCapacityExceeded(factory),
                 pickupBeforeDelivery(factory),
                 sameOrderSameCourier(factory),
+
+                //restaurant hard
+                pickupRestaurantMustMatchFoodChain(factory),
+                pickupMustHaveRestaurant(factory),
+                restaurantMustBeAbleToProcessOrder(factory),
+                restaurantMaxParallelCapacity(factory),
+
+                //courier soft
                 minimizeCouriers(factory),
-                courierShiftDurationBetween3And6Hours(factory),
-                foodMaxDeliveryTimeNotExceeded(factory),
         };
     }
 
@@ -52,15 +67,84 @@ public class DeliveryConstraintProvider implements ConstraintProvider {
     private Constraint sameOrderSameCourier(ConstraintFactory factory) {
         return factory.forEach(Visit.class)
                 .filter(v -> v.getType() == Visit.VisitType.CUSTOMER)
-                // Join with the Restaurant visit of the SAME order
+                .join(Visit.class, Joiners.equal(Visit::getOrder))
+                .filter((v1, v2) -> v2.getType() == Visit.VisitType.RESTAURANT)
+                // If one is assigned and the other isn't, OR they are assigned to different couriers
+                .filter((cust, rest) -> !Objects.equals(cust.getCourier(), rest.getCourier()))
+                .penalize(HardSoftScore.ofHard(10_000)) // Make this VERY high
+                .asConstraint("Order visits must be on same courier");
+    }
+
+    /**
+     * HARD:
+     * Pickup visit must use a restaurant from the same chain as the ordered food.
+     */
+    private Constraint pickupRestaurantMustMatchFoodChain(ConstraintFactory factory) {
+        return factory.forEach(Visit.class)
+                .filter(v -> v.getType() == Visit.VisitType.RESTAURANT)
+                .filter(v -> v.getRestaurant() != null)
+                .filter(v ->
+                        v.getOrder().getFoods().stream()
+                                .anyMatch(f -> !f.getChainId().equals(v.getRestaurant().getChainId()))
+                )
+                .penalize(HardSoftScore.ofHard(1_000))
+                .asConstraint("Pickup restaurant must match food chain");
+    }
+
+    /**
+     * HARD:
+     * Pickup visit must use a restaurant from the same chain as the ordered food.
+     */
+    private Constraint pickupMustHaveRestaurant(ConstraintFactory factory) {
+        return factory.forEach(Visit.class)
+                .filter(v -> v.getType() == Visit.VisitType.RESTAURANT)
+                .filter(v -> v.getRestaurant() == null)
+                .penalize(HardSoftScore.ofHard(1_000))
+                .asConstraint("Pickup must have restaurant");
+    }
+
+    /**
+     * HARD:
+     * Pickup visit must use a restaurant from the same chain as the ordered food.
+     */
+    private Constraint restaurantMustBeAbleToProcessOrder(ConstraintFactory factory) {
+        return factory.forEach(Visit.class)
+                .filter(v -> v.getType() == Visit.VisitType.RESTAURANT)
+                .filter(v -> v.getRestaurant() != null)
+                .filter(v -> !Objects.equals(v.getRestaurant().getChainId(), v.getOrder().getChainId()))
+                .penalize(HardSoftScore.ofHard(1_000))
+                .asConstraint("Order must be processed in correct restaurant chain");
+    }
+
+    /**
+     * HARD:
+     * Pickup visit must use a restaurant from the same chain as the ordered food.
+     */
+    private Constraint restaurantMaxParallelCapacity(ConstraintFactory factory) {
+        return factory.forEach(Visit.class)
+                .filter(v -> v.getType() == Visit.VisitType.RESTAURANT && v.getRestaurant() != null && v.getMinuteTime() != null)
+                // Join visits happening at the same restaurant
                 .join(Visit.class,
-                        Joiners.equal(Visit::getOrder),
-                        Joiners.filtering((cust, rest) -> rest.getType() == Visit.VisitType.RESTAURANT))//get the pair only if second entity is restaurant (first then will always be customer)
-                // Now we have both CLONED instances currently managed by the solver
-                .filter((cust, rest) -> cust.getCourier() != null && (rest.getCourier() == null
-                        || !cust.getCourier().getId().equals(rest.getCourier().getId())))
-                .penalize(HardSoftScore.ofHard(1000))
-                .asConstraint("Order must be picked up and delivered by the same courier");
+                        Joiners.equal(Visit::getRestaurant),
+                        Joiners.lessThan(Visit::getId) // Avoid double-counting (A-B and B-A) and self-comparison
+                )
+                // Filter for time overlaps
+                // An overlap exists if: Visit A starts before Visit B finishes, AND Visit B starts before Visit A finishes
+                .filter((v1, v2) -> {
+                    int start1 = v1.getMinuteTime() - v1.getOrder().getTotalCookTime();
+                    int end1 = v1.getMinuteTime();
+
+                    int start2 = v2.getMinuteTime() - v2.getOrder().getTotalCookTime();
+                    int end2 = v2.getMinuteTime();
+
+                    return start1 < end2 && start2 < end1;
+                })
+                // Group by the first visit to count how many other visits overlap with it
+                .groupBy((v1, v2) -> v1, ConstraintCollectors.countBi())
+                // Penalize if the number of simultaneous orders (count + 1 for self) > maxParallel
+                .filter((v1, overlapCount) -> (overlapCount + 1) > v1.getRestaurant().getParallelCookingCapacity())
+                .penalize(HardSoftScore.ONE_HARD, (v1, overlapCount) -> (overlapCount + 1) - v1.getRestaurant().getParallelCookingCapacity())
+                .asConstraint("Restaurant max parallel capacity exceeded");
     }
 
     /**
