@@ -43,16 +43,23 @@ public class Visit {
         CUSTOMER
     }
 
-    private String chainId;
+    private Restaurant restaurant;
 
     public Visit() {this.id = ID_GENERATOR.incrementAndGet();}
 
-    public Visit(Order order, Location location, VisitType type, String chainId) {
+    public Visit(Order order, Location location, VisitType type) {
         this.id = ID_GENERATOR.incrementAndGet();
         this.order = order;
         this.location = location;
         this.type = type;
-        this.chainId = chainId;
+    }
+
+    public Visit(Order order, Location location, VisitType type, Restaurant restaurant) {
+        this.id = ID_GENERATOR.incrementAndGet();
+        this.order = order;
+        this.location = location;
+        this.type = type;
+        this.restaurant = restaurant;
     }
 
     public void updateData() {

@@ -19,7 +19,7 @@ public class Restaurant {
     private int parallelCookingCapacity;
 
     private boolean boost;
-
+    public boolean getBoost() { return boost; }
 
     public Restaurant() {}
 

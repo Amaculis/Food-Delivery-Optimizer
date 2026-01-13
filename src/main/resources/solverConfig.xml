@@ -5,7 +5,8 @@
                             https://timefold.ai/xsd/solver/solver.xsd">
 
     <!-- Debug-friendly, catches mistakes early -->
-    <environmentMode>PHASE_ASSERT</environmentMode>
+    <!-- <environmentMode>FULL_ASSERT</environmentMode> -->
+    <environmentMode>NO_ASSERT</environmentMode>
 
     <!-- MODEL -->
     <solutionClass>domain.DeliverySolution</solutionClass>
@@ -21,8 +22,7 @@
 
     <!-- SOLVER -->
     <termination>
-        <secondsSpentLimit>5</secondsSpentLimit>
-        <!-- <diminishedReturns /> -->
+         <diminishedReturns />
     </termination>
 
     <constructionHeuristic />
