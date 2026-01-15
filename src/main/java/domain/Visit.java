@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @PlanningEntity
 @Getter
 @Setter
+
 public class Visit {
     private static final AtomicLong ID_GENERATOR = new AtomicLong(0);
 
@@ -61,7 +62,9 @@ public class Visit {
         this.type = type;
         this.restaurant = restaurant;
     }
-
+    public void setVisitType(VisitType visitType) {
+        this.type = visitType;
+    }
     public void updateData() {
         updateDeliveryTime();
     }
@@ -112,5 +115,9 @@ public class Visit {
             // Delivery time at customer
             return 3; // minutes
         }
+    }
+
+    public void setCourierShift(CourierShift courierShift) {
+        this.courier = courierShift;
     }
 }

@@ -1,0 +1,144 @@
+{
+  "foods": [
+    {
+      "id": "Pizza",
+      "volume": 3,
+      "prepTimeMinutes": 15,
+      "maxDeliveryMinutes": 45,
+      "temperature": "HOT",
+      "price": 12.0,
+      "chainId": "ChainA"
+    },
+    {
+      "id": "Burger",
+      "volume": 4,
+      "prepTimeMinutes": 12,
+      "maxDeliveryMinutes": 40,
+      "temperature": "HOT",
+      "price": 10.0,
+      "chainId": "ChainA"
+    },
+    {
+      "id": "Salad",
+      "volume": 2,
+      "prepTimeMinutes": 5,
+      "maxDeliveryMinutes": 30,
+      "temperature": "COLD",
+      "price": 7.0,
+      "chainId": "ChainB"
+    },
+    {
+      "id": "Sushi",
+      "volume": 2,
+      "prepTimeMinutes": 20,
+      "maxDeliveryMinutes": 50,
+      "temperature": "COLD",
+      "price": 15.0,
+      "chainId": "ChainB"
+    }
+  ],
+
+  "locationList": [
+    { "id": 1, "lat": 56.95, "lon": 24.11 },
+    { "id": 2, "lat": 56.96, "lon": 24.10 },
+    { "id": 3, "lat": 56.97, "lon": 24.12 },
+    { "id": 4, "lat": 56.98, "lon": 24.13 },
+    { "id": 100, "lat": 56.99, "lon": 24.14 },
+    { "id": 101, "lat": 57.00, "lon": 24.15 },
+    { "id": 102, "lat": 57.01, "lon": 24.16 }
+  ],
+
+  "restaurantList": [
+    {
+      "id": "RA1",
+      "chainId": "ChainA",
+      "parallelCookingCapacity": 4,
+      "location": "1",
+      "boost" : false
+    },
+    {
+      "id": "RA2",
+      "chainId": "ChainA",
+      "parallelCookingCapacity": 6,
+      "location": "2",
+      "boost" : false
+    },
+    {
+      "id": "RB1",
+      "chainId": "ChainB",
+      "parallelCookingCapacity": 2,
+      "location": "3",
+      "boost" : false
+    },
+    {
+      "id": "RB2",
+      "chainId": "ChainB",
+      "parallelCookingCapacity": 1,
+      "location": "4",
+      "boost" : true
+    }
+  ],
+
+  "orders": [
+    {
+      "id": "O1",
+      "earliestMinute": 480,
+      "latestMinute": 540,
+      "foods": ["Pizza", "Burger"],
+      "deliveryLocation": { "id": 100 }
+    },
+    {
+      "id": "O2",
+      "earliestMinute": 500,
+      "latestMinute": 580,
+      "foods": ["Salad"],
+      "deliveryLocation": { "id": 101 }
+    },
+    {
+      "id": "O2_2",
+      "earliestMinute": 500,
+      "latestMinute": 580,
+      "foods": ["Salad"],
+      "deliveryLocation": { "id": 101 }
+    },
+    {
+      "id": "O3",
+      "earliestMinute": 520,
+      "latestMinute": 600,
+      "foods": ["Sushi"],
+      "deliveryLocation": { "id": 102 }
+    },
+    {
+      "id": "O4",
+      "earliestMinute": 700,
+      "latestMinute": 780,
+      "foods": ["Pizza"],
+      "deliveryLocation": { "id": 100 }
+    },
+    {
+      "id": "O5",
+      "earliestMinute": 900,
+      "latestMinute": 980,
+      "foods": ["Burger"],
+      "deliveryLocation": { "id": 101 }
+    }
+  ],
+
+  "courierShifts": [
+    {
+      "id": "C1",
+      "hotCapacity": 12,
+      "coldCapacity": 6
+    },
+    {
+      "id": "C2",
+      "hotCapacity": 8,
+      "coldCapacity": 10
+    },
+    {
+      "id": "C3",
+      "hotCapacity": 10,
+      "coldCapacity": 8
+    }
+  ]
+}

@@ -22,7 +22,7 @@ public class Order {
     private Visit restaurantVisit;
     @InverseRelationShadowVariable(sourceVariableName = "order")
     private Visit customerVisit;
-
+    
     private String chainId;
     private int minAllowedTimeToDeliver;
     private int totalCookTime;

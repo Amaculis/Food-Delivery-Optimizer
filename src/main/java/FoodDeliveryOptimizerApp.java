@@ -3,8 +3,9 @@ import ai.timefold.solver.core.api.solver.Solver;
 import ai.timefold.solver.core.api.solver.SolverFactory;
 import java.util.*;
 import domain.*;
-import domain.Food.Temperature;
 
+import generator.Generator;
+import generator.JsonIO;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,8 +16,18 @@ public class FoodDeliveryOptimizerApp {
 
     public static void main(String[] args) {
         // --- Courier shifts ---
-        DeliverySolution problem = getSolution();
+        String path = "src/main/resources/DeliveryProblem.json";
+        DeliverySolution problem = JsonIO.read_json(path); //New json solution
 
+        List<Visit> visits = Generator.VisitGenerator.generateAll(problem);
+        problem.setVisitList(visits);
+
+        DeliverySolution problems = getSolution(); //Old manual solutions
+
+        startSolution(problem);
+
+    }
+    private static void startSolution(DeliverySolution problem) {
         Router router = Router.getDefaultRouterInstance();
         router.setDistanceTimeMap(problem.getLocationList());
 
