@@ -122,23 +122,5 @@
       "foods": ["Burger"],
       "deliveryLocation": { "id": 101 }
     }
-  ],
-
-  "courierShifts": [
-    {
-      "id": "C1",
-      "hotCapacity": 12,
-      "coldCapacity": 6
-    },
-    {
-      "id": "C2",
-      "hotCapacity": 8,
-      "coldCapacity": 10
-    },
-    {
-      "id": "C3",
-      "hotCapacity": 10,
-      "coldCapacity": 8
-    }
   ]
 }

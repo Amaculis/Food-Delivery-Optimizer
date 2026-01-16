@@ -117,19 +117,16 @@ public class JsonIO {
                 }
             }
 
-            //  CourierShift
+            // CourierShift
             List<CourierShift> couriers = new ArrayList<>();
-            JsonNode courierList = root.get("courierShifts");
-            if (courierList != null) {
-                for (JsonNode courierNode : courierList) {
-                    CourierShift courier = new CourierShift(
-                            courierNode.get("id").asText(),
-                            courierNode.get("hotCapacity").asInt(),
-                            courierNode.get("coldCapacity").asInt()
-                    );
-                    courier.setVisits(new ArrayList<>());
-                    couriers.add(courier);
-                }
+            for (int i = 1; i <= 50; i++) {
+                CourierShift courier = new CourierShift(
+                        "C" + i,
+                        12,      // hotCapacity
+                        6                  // coldCapacity
+                );
+                courier.setVisits(new ArrayList<>());
+                couriers.add(courier);
             }
 
             // Create solution
