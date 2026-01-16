@@ -1,0 +1,679 @@
+{
+  "foods": [
+    {
+      "id": "Margherita",
+      "volume": 3,
+      "prepTimeMinutes": 12,
+      "maxDeliveryMinutes": 40,
+      "temperature": "HOT",
+      "price": 8.5,
+      "chainId": "PizzaExpress"
+    },
+    {
+      "id": "Pepperoni",
+      "volume": 3,
+      "prepTimeMinutes": 14,
+      "maxDeliveryMinutes": 40,
+      "temperature": "HOT",
+      "price": 10.0,
+      "chainId": "PizzaExpress"
+    },
+    {
+      "id": "FourCheese",
+      "volume": 3,
+      "prepTimeMinutes": 13,
+      "maxDeliveryMinutes": 40,
+      "temperature": "HOT",
+      "price": 11.0,
+      "chainId": "PizzaExpress"
+    },
+    {
+      "id": "Veggie",
+      "volume": 3,
+      "prepTimeMinutes": 11,
+      "maxDeliveryMinutes": 40,
+      "temperature": "HOT",
+      "price": 9.0,
+      "chainId": "PizzaExpress"
+    },
+    {
+      "id": "ClassicBurger",
+      "volume": 4,
+      "prepTimeMinutes": 10,
+      "maxDeliveryMinutes": 35,
+      "temperature": "HOT",
+      "price": 7.5,
+      "chainId": "BurgerKing"
+    },
+    {
+      "id": "CheeseBurger",
+      "volume": 4,
+      "prepTimeMinutes": 11,
+      "maxDeliveryMinutes": 35,
+      "temperature": "HOT",
+      "price": 8.5,
+      "chainId": "BurgerKing"
+    },
+    {
+      "id": "DoubleBurger",
+      "volume": 5,
+      "prepTimeMinutes": 13,
+      "maxDeliveryMinutes": 35,
+      "temperature": "HOT",
+      "price": 12.0,
+      "chainId": "BurgerKing"
+    },
+    {
+      "id": "VeggieBurger",
+      "volume": 4,
+      "prepTimeMinutes": 10,
+      "maxDeliveryMinutes": 35,
+      "temperature": "HOT",
+      "price": 8.0,
+      "chainId": "BurgerKing"
+    },
+    {
+      "id": "Fries",
+      "volume": 2,
+      "prepTimeMinutes": 8,
+      "maxDeliveryMinutes": 30,
+      "temperature": "HOT",
+      "price": 3.5,
+      "chainId": "BurgerKing"
+    },
+    {
+      "id": "CaesarSalad",
+      "volume": 2,
+      "prepTimeMinutes": 6,
+      "maxDeliveryMinutes": 25,
+      "temperature": "COLD",
+      "price": 6.5,
+      "chainId": "FreshBar"
+    },
+    {
+      "id": "GreekSalad",
+      "volume": 2,
+      "prepTimeMinutes": 5,
+      "maxDeliveryMinutes": 25,
+      "temperature": "COLD",
+      "price": 6.0,
+      "chainId": "FreshBar"
+    },
+    {
+      "id": "ChickenSalad",
+      "volume": 3,
+      "prepTimeMinutes": 8,
+      "maxDeliveryMinutes": 30,
+      "temperature": "COLD",
+      "price": 8.5,
+      "chainId": "FreshBar"
+    },
+    {
+      "id": "SalmonRoll",
+      "volume": 2,
+      "prepTimeMinutes": 18,
+      "maxDeliveryMinutes": 45,
+      "temperature": "COLD",
+      "price": 14.0,
+      "chainId": "SushiWorld"
+    },
+    {
+      "id": "TunaRoll",
+      "volume": 2,
+      "prepTimeMinutes": 18,
+      "maxDeliveryMinutes": 45,
+      "temperature": "COLD",
+      "price": 15.0,
+      "chainId": "SushiWorld"
+    },
+    {
+      "id": "VeggieRoll",
+      "volume": 2,
+      "prepTimeMinutes": 15,
+      "maxDeliveryMinutes": 45,
+      "temperature": "COLD",
+      "price": 10.0,
+      "chainId": "SushiWorld"
+    },
+    {
+      "id": "MixedSet",
+      "volume": 4,
+      "prepTimeMinutes": 25,
+      "maxDeliveryMinutes": 50,
+      "temperature": "COLD",
+      "price": 22.0,
+      "chainId": "SushiWorld"
+    },
+    {
+      "id": "PadThai",
+      "volume": 3,
+      "prepTimeMinutes": 16,
+      "maxDeliveryMinutes": 40,
+      "temperature": "HOT",
+      "price": 11.5,
+      "chainId": "AsianKitchen"
+    },
+    {
+      "id": "FriedRice",
+      "volume": 3,
+      "prepTimeMinutes": 12,
+      "maxDeliveryMinutes": 35,
+      "temperature": "HOT",
+      "price": 9.0,
+      "chainId": "AsianKitchen"
+    },
+    {
+      "id": "SpringRolls",
+      "volume": 2,
+      "prepTimeMinutes": 10,
+      "maxDeliveryMinutes": 30,
+      "temperature": "HOT",
+      "price": 6.5,
+      "chainId": "AsianKitchen"
+    }
+  ],
+
+  "locationList": [
+    { "id": 1, "lat": 56.948, "lon": 24.105 },
+    { "id": 2, "lat": 56.951, "lon": 24.110 },
+    { "id": 3, "lat": 56.955, "lon": 24.115 },
+    { "id": 4, "lat": 56.960, "lon": 24.108 },
+    { "id": 5, "lat": 56.965, "lon": 24.120 },
+    { "id": 6, "lat": 56.970, "lon": 24.125 },
+    { "id": 7, "lat": 56.945, "lon": 24.100 },
+    { "id": 8, "lat": 56.958, "lon": 24.118 },
+    { "id": 9, "lat": 56.963, "lon": 24.112 },
+    { "id": 10, "lat": 56.968, "lon": 24.122 },
+    { "id": 100, "lat": 56.950, "lon": 24.130 },
+    { "id": 101, "lat": 56.952, "lon": 24.132 },
+    { "id": 102, "lat": 56.954, "lon": 24.128 },
+    { "id": 103, "lat": 56.956, "lon": 24.135 },
+    { "id": 104, "lat": 56.958, "lon": 24.138 },
+    { "id": 105, "lat": 56.960, "lon": 24.140 },
+    { "id": 106, "lat": 56.962, "lon": 24.142 },
+    { "id": 107, "lat": 56.964, "lon": 24.136 },
+    { "id": 108, "lat": 56.966, "lon": 24.144 },
+    { "id": 109, "lat": 56.968, "lon": 24.146 },
+    { "id": 110, "lat": 56.970, "lon": 24.148 },
+    { "id": 111, "lat": 56.972, "lon": 24.150 },
+    { "id": 112, "lat": 56.974, "lon": 24.145 },
+    { "id": 113, "lat": 56.976, "lon": 24.152 },
+    { "id": 114, "lat": 56.978, "lon": 24.154 },
+    { "id": 115, "lat": 56.946, "lon": 24.126 }
+  ],
+
+  "restaurantList": [
+    {
+      "id": "PE1",
+      "chainId": "PizzaExpress",
+      "parallelCookingCapacity": 5,
+      "location": "1",
+      "boost": false
+    },
+    {
+      "id": "PE2",
+      "chainId": "PizzaExpress",
+      "parallelCookingCapacity": 4,
+      "location": "3",
+      "boost": false
+    },
+    {
+      "id": "PE3",
+      "chainId": "PizzaExpress",
+      "parallelCookingCapacity": 6,
+      "location": "7",
+      "boost": true
+    },
+    {
+      "id": "BK1",
+      "chainId": "BurgerKing",
+      "parallelCookingCapacity": 8,
+      "location": "2",
+      "boost": false
+    },
+    {
+      "id": "BK2",
+      "chainId": "BurgerKing",
+      "parallelCookingCapacity": 7,
+      "location": "5",
+      "boost": false
+    },
+    {
+      "id": "BK3",
+      "chainId": "BurgerKing",
+      "parallelCookingCapacity": 6,
+      "location": "9",
+      "boost": false
+    },
+    {
+      "id": "FB1",
+      "chainId": "FreshBar",
+      "parallelCookingCapacity": 3,
+      "location": "4",
+      "boost": false
+    },
+    {
+      "id": "FB2",
+      "chainId": "FreshBar",
+      "parallelCookingCapacity": 4,
+      "location": "8",
+      "boost": true
+    },
+    {
+      "id": "SW1",
+      "chainId": "SushiWorld",
+      "parallelCookingCapacity": 3,
+      "location": "6",
+      "boost": false
+    },
+    {
+      "id": "SW2",
+      "chainId": "SushiWorld",
+      "parallelCookingCapacity": 2,
+      "location": "10",
+      "boost": false
+    },
+    {
+      "id": "AK1",
+      "chainId": "AsianKitchen",
+      "parallelCookingCapacity": 4,
+      "location": "3",
+      "boost": false
+    },
+    {
+      "id": "AK2",
+      "chainId": "AsianKitchen",
+      "parallelCookingCapacity": 5,
+      "location": "8",
+      "boost": true
+    }
+  ],
+
+  "orders": [
+    {
+      "id": "O1",
+      "earliestMinute": 480,
+      "latestMinute": 540,
+      "foods": ["Margherita", "Pepperoni"],
+      "deliveryLocation": { "id": 100 }
+    },
+    {
+      "id": "O2",
+      "earliestMinute": 485,
+      "latestMinute": 545,
+      "foods": ["ClassicBurger", "Fries"],
+      "deliveryLocation": { "id": 101 }
+    },
+    {
+      "id": "O3",
+      "earliestMinute": 490,
+      "latestMinute": 550,
+      "foods": ["CaesarSalad"],
+      "deliveryLocation": { "id": 102 }
+    },
+    {
+      "id": "O4",
+      "earliestMinute": 495,
+      "latestMinute": 560,
+      "foods": ["SalmonRoll", "TunaRoll"],
+      "deliveryLocation": { "id": 103 }
+    },
+    {
+      "id": "O5",
+      "earliestMinute": 500,
+      "latestMinute": 565,
+      "foods": ["PadThai", "SpringRolls"],
+      "deliveryLocation": { "id": 104 }
+    },
+    {
+      "id": "O6",
+      "earliestMinute": 505,
+      "latestMinute": 570,
+      "foods": ["FourCheese"],
+      "deliveryLocation": { "id": 105 }
+    },
+    {
+      "id": "O7",
+      "earliestMinute": 510,
+      "latestMinute": 575,
+      "foods": ["CheeseBurger", "Fries"],
+      "deliveryLocation": { "id": 106 }
+    },
+    {
+      "id": "O8",
+      "earliestMinute": 515,
+      "latestMinute": 580,
+      "foods": ["GreekSalad", "ChickenSalad"],
+      "deliveryLocation": { "id": 107 }
+    },
+    {
+      "id": "O9",
+      "earliestMinute": 520,
+      "latestMinute": 585,
+      "foods": ["VeggieRoll", "MixedSet"],
+      "deliveryLocation": { "id": 108 }
+    },
+    {
+      "id": "O10",
+      "earliestMinute": 525,
+      "latestMinute": 590,
+      "foods": ["FriedRice"],
+      "deliveryLocation": { "id": 109 }
+    },
+    {
+      "id": "O11",
+      "earliestMinute": 530,
+      "latestMinute": 595,
+      "foods": ["Pepperoni", "Veggie"],
+      "deliveryLocation": { "id": 110 }
+    },
+    {
+      "id": "O12",
+      "earliestMinute": 535,
+      "latestMinute": 600,
+      "foods": ["DoubleBurger"],
+      "deliveryLocation": { "id": 111 }
+    },
+    {
+      "id": "O13",
+      "earliestMinute": 540,
+      "latestMinute": 605,
+      "foods": ["CaesarSalad"],
+      "deliveryLocation": { "id": 112 }
+    },
+    {
+      "id": "O14",
+      "earliestMinute": 545,
+      "latestMinute": 610,
+      "foods": ["SalmonRoll"],
+      "deliveryLocation": { "id": 113 }
+    },
+    {
+      "id": "O15",
+      "earliestMinute": 550,
+      "latestMinute": 615,
+      "foods": ["PadThai", "FriedRice"],
+      "deliveryLocation": { "id": 114 }
+    },
+    {
+      "id": "O16",
+      "earliestMinute": 555,
+      "latestMinute": 620,
+      "foods": ["Margherita"],
+      "deliveryLocation": { "id": 115 }
+    },
+    {
+      "id": "O17",
+      "earliestMinute": 560,
+      "latestMinute": 625,
+      "foods": ["ClassicBurger", "Fries"],
+      "deliveryLocation": { "id": 100 }
+    },
+    {
+      "id": "O18",
+      "earliestMinute": 565,
+      "latestMinute": 630,
+      "foods": ["ChickenSalad"],
+      "deliveryLocation": { "id": 101 }
+    },
+    {
+      "id": "O19",
+      "earliestMinute": 570,
+      "latestMinute": 635,
+      "foods": ["TunaRoll", "VeggieRoll"],
+      "deliveryLocation": { "id": 102 }
+    },
+    {
+      "id": "O20",
+      "earliestMinute": 575,
+      "latestMinute": 640,
+      "foods": ["SpringRolls"],
+      "deliveryLocation": { "id": 103 }
+    },
+    {
+      "id": "O21",
+      "earliestMinute": 600,
+      "latestMinute": 665,
+      "foods": ["FourCheese", "Pepperoni"],
+      "deliveryLocation": { "id": 104 }
+    },
+    {
+      "id": "O22",
+      "earliestMinute": 605,
+      "latestMinute": 670,
+      "foods": ["VeggieBurger", "Fries"],
+      "deliveryLocation": { "id": 105 }
+    },
+    {
+      "id": "O23",
+      "earliestMinute": 610,
+      "latestMinute": 675,
+      "foods": ["GreekSalad"],
+      "deliveryLocation": { "id": 106 }
+    },
+    {
+      "id": "O24",
+      "earliestMinute": 615,
+      "latestMinute": 680,
+      "foods": ["MixedSet"],
+      "deliveryLocation": { "id": 107 }
+    },
+    {
+      "id": "O25",
+      "earliestMinute": 620,
+      "latestMinute": 685,
+      "foods": ["PadThai"],
+      "deliveryLocation": { "id": 108 }
+    },
+    {
+      "id": "O26",
+      "earliestMinute": 650,
+      "latestMinute": 715,
+      "foods": ["Margherita", "FourCheese"],
+      "deliveryLocation": { "id": 109 }
+    },
+    {
+      "id": "O27",
+      "earliestMinute": 655,
+      "latestMinute": 720,
+      "foods": ["CheeseBurger"],
+      "deliveryLocation": { "id": 110 }
+    },
+    {
+      "id": "O28",
+      "earliestMinute": 660,
+      "latestMinute": 725,
+      "foods": ["CaesarSalad", "GreekSalad"],
+      "deliveryLocation": { "id": 111 }
+    },
+    {
+      "id": "O29",
+      "earliestMinute": 665,
+      "latestMinute": 730,
+      "foods": ["SalmonRoll", "TunaRoll"],
+      "deliveryLocation": { "id": 112 }
+    },
+    {
+      "id": "O30",
+      "earliestMinute": 670,
+      "latestMinute": 735,
+      "foods": ["FriedRice", "SpringRolls"],
+      "deliveryLocation": { "id": 113 }
+    },
+    {
+      "id": "O31",
+      "earliestMinute": 700,
+      "latestMinute": 765,
+      "foods": ["Pepperoni"],
+      "deliveryLocation": { "id": 114 }
+    },
+    {
+      "id": "O32",
+      "earliestMinute": 705,
+      "latestMinute": 770,
+      "foods": ["DoubleBurger", "Fries"],
+      "deliveryLocation": { "id": 115 }
+    },
+    {
+      "id": "O33",
+      "earliestMinute": 710,
+      "latestMinute": 775,
+      "foods": ["ChickenSalad"],
+      "deliveryLocation": { "id": 100 }
+    },
+    {
+      "id": "O34",
+      "earliestMinute": 715,
+      "latestMinute": 780,
+      "foods": ["VeggieRoll"],
+      "deliveryLocation": { "id": 101 }
+    },
+    {
+      "id": "O35",
+      "earliestMinute": 720,
+      "latestMinute": 785,
+      "foods": ["PadThai", "FriedRice"],
+      "deliveryLocation": { "id": 102 }
+    },
+    {
+      "id": "O36",
+      "earliestMinute": 750,
+      "latestMinute": 815,
+      "foods": ["Veggie", "Margherita"],
+      "deliveryLocation": { "id": 103 }
+    },
+    {
+      "id": "O37",
+      "earliestMinute": 755,
+      "latestMinute": 820,
+      "foods": ["ClassicBurger"],
+      "deliveryLocation": { "id": 104 }
+    },
+    {
+      "id": "O38",
+      "earliestMinute": 760,
+      "latestMinute": 825,
+      "foods": ["CaesarSalad"],
+      "deliveryLocation": { "id": 105 }
+    },
+    {
+      "id": "O39",
+      "earliestMinute": 765,
+      "latestMinute": 830,
+      "foods": ["MixedSet", "SalmonRoll"],
+      "deliveryLocation": { "id": 106 }
+    },
+    {
+      "id": "O40",
+      "earliestMinute": 770,
+      "latestMinute": 835,
+      "foods": ["SpringRolls"],
+      "deliveryLocation": { "id": 107 }
+    },
+    {
+      "id": "O41",
+      "earliestMinute": 800,
+      "latestMinute": 865,
+      "foods": ["FourCheese"],
+      "deliveryLocation": { "id": 108 }
+    },
+    {
+      "id": "O42",
+      "earliestMinute": 805,
+      "latestMinute": 870,
+      "foods": ["VeggieBurger", "Fries"],
+      "deliveryLocation": { "id": 109 }
+    },
+    {
+      "id": "O43",
+      "earliestMinute": 810,
+      "latestMinute": 875,
+      "foods": ["GreekSalad", "ChickenSalad"],
+      "deliveryLocation": { "id": 110 }
+    },
+    {
+      "id": "O44",
+      "earliestMinute": 815,
+      "latestMinute": 880,
+      "foods": ["TunaRoll"],
+      "deliveryLocation": { "id": 111 }
+    },
+    {
+      "id": "O45",
+      "earliestMinute": 820,
+      "latestMinute": 885,
+      "foods": ["FriedRice"],
+      "deliveryLocation": { "id": 112 }
+    },
+    {
+      "id": "O46",
+      "earliestMinute": 850,
+      "latestMinute": 915,
+      "foods": ["Pepperoni", "Veggie"],
+      "deliveryLocation": { "id": 113 }
+    },
+    {
+      "id": "O47",
+      "earliestMinute": 855,
+      "latestMinute": 920,
+      "foods": ["CheeseBurger", "Fries"],
+      "deliveryLocation": { "id": 114 }
+    },
+    {
+      "id": "O48",
+      "earliestMinute": 860,
+      "latestMinute": 925,
+      "foods": ["CaesarSalad"],
+      "deliveryLocation": { "id": 115 }
+    },
+    {
+      "id": "O49",
+      "earliestMinute": 865,
+      "latestMinute": 930,
+      "foods": ["SalmonRoll", "VeggieRoll"],
+      "deliveryLocation": { "id": 100 }
+    },
+    {
+      "id": "O50",
+      "earliestMinute": 870,
+      "latestMinute": 935,
+      "foods": ["PadThai", "SpringRolls"],
+      "deliveryLocation": { "id": 101 }
+    },
+    {
+      "id": "O51",
+      "earliestMinute": 900,
+      "latestMinute": 965,
+      "foods": ["Margherita"],
+      "deliveryLocation": { "id": 102 }
+    },
+    {
+      "id": "O52",
+      "earliestMinute": 905,
+      "latestMinute": 970,
+      "foods": ["DoubleBurger"],
+      "deliveryLocation": { "id": 103 }
+    },
+    {
+      "id": "O53",
+      "earliestMinute": 910,
+      "latestMinute": 975,
+      "foods": ["ChickenSalad"],
+      "deliveryLocation": { "id": 104 }
+    },
+    {
+      "id": "O54",
+      "earliestMinute": 915,
+      "latestMinute": 980,
+      "foods": ["MixedSet"],
+      "deliveryLocation": { "id": 105 }
+    },
+    {
+      "id": "O55",
+      "earliestMinute": 920,
+      "latestMinute": 985,
+      "foods": ["FriedRice"],
+      "deliveryLocation": { "id": 106 }
+    }
+  ]
+}
